@@ -1301,16 +1301,24 @@ const prevPageBtn = document.getElementById('prevPage');
 const nextPageBtn = document.getElementById('nextPage');
 const pageInfo = document.getElementById('pageInfo');
 
-const entriesPerPage = 20;
+const entriesPerPage = 5;
 let allEntries = [];
 let currentPage = 1;
 
 let ws;
 let sessionToken = null;
+let myUsername = null;
 let typingTimeout;
 let emojiOpen = false;
 let messagesInitialized = false;
-let chatRoomVisited = false; 
+let chatRoomVisited = false;
+let reconnectAttempts = 0;
+let isTyping = false;
+
+// Get the base URL for API calls
+function getBaseURL() {
+    return window.location.origin;
+}
 
 function displayEntriesPage(page) {
     entriesContainer.innerHTML = '';
@@ -1318,6 +1326,11 @@ function displayEntriesPage(page) {
     const startIndex = (page - 1) * entriesPerPage;
     const endIndex = startIndex + entriesPerPage;
     const pageEntries = allEntries.slice(startIndex, endIndex);
+    
+    if (pageEntries.length === 0) {
+        entriesContainer.innerHTML = '<div class="entry">No entries yet. Be the first to sign!</div>';
+        return;
+    }
     
     pageEntries.forEach(entry => addGuestbookEntryToPage(entry));
     
@@ -1331,7 +1344,7 @@ function displayEntriesPage(page) {
 function goToPage(page) {
     currentPage = page;
     displayEntriesPage(currentPage);
-    document.querySelector('.guestbook-entries-frame').scrollTop = 0;
+    document.querySelector('.guestbook-entries-scroll-container').scrollTop = 0;
 }
 
 function showRules() {
@@ -1344,7 +1357,6 @@ function showRules() {
     guestbookContent.style.display = 'none';
     updateContent.style.display = 'none';
     rulesContent.style.display = 'block';
-    
     
     chatRoomVisited = true;
 }
@@ -1415,6 +1427,12 @@ function showChatRoom() {
     guestbookContent.style.display = 'none';
     updateContent.style.display = 'none';
     rulesContent.style.display = 'none';
+    chatRoomVisited = true;
+    
+    // Connect to chat if not already connected
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        connect();
+    }
 }
 
 function showLinks() {
@@ -1439,6 +1457,9 @@ function showGuestbook() {
     guestbookContent.style.display = 'block';
     updateContent.style.display = 'none';
     rulesContent.style.display = 'none';
+    
+    // Reload guestbook entries when showing the guestbook
+    loadGuestbookEntries();
 }
 
 function showUpdate() {
@@ -1456,6 +1477,7 @@ function showUpdate() {
 function toggleRules() {
     if (rulesContent.style.display === 'block') {
         rulesContent.style.display = 'none';
+        showChatRoom();
     } else {
         homeContent.style.display = 'none';
         aboutContent.style.display = 'none';
@@ -1473,13 +1495,27 @@ messageInput.addEventListener('input', function() {
     const currentLength = this.value.length;
     charCount.textContent = `${currentLength}/300`;
     
-    if (currentLength > 0 && !typingTimeout) {
+    // Send typing indicator
+    if (!isTyping && currentLength > 0) {
+        isTyping = true;
+        if (ws && ws.readyState === WebSocket.OPEN && sessionToken) {
+            ws.send(JSON.stringify({ type: 'typing', token: sessionToken, isTyping: true }));
+        }
+    }
+    
+    // Clear previous timeout
+    if (typingTimeout) {
         clearTimeout(typingTimeout);
     }
     
+    // Set timeout to send not typing
     typingTimeout = setTimeout(() => {
+        isTyping = false;
+        if (ws && ws.readyState === WebSocket.OPEN && sessionToken) {
+            ws.send(JSON.stringify({ type: 'typing', token: sessionToken, isTyping: false }));
+        }
         typingTimeout = null;
-    }, 3000);
+    }, 1000);
 });
 
 emojiBtn.addEventListener('click', function() {
@@ -1503,13 +1539,11 @@ function addMessage(username, message, timestamp, isMe = false, animate = false)
     const msgDiv = document.createElement('div');
     msgDiv.className = `msg ${isMe ? 'me' : ''}`;
     
-
     if (animate && !chatRoomVisited) {
         msgDiv.style.opacity = '0';
         msgDiv.style.transform = 'translateY(20px)';
     }
 
-    
     const headerDiv = document.createElement('div');
     headerDiv.style.display = 'flex';
     headerDiv.style.justifyContent = 'space-between';
@@ -1534,44 +1568,38 @@ function addMessage(username, message, timestamp, isMe = false, animate = false)
     headerDiv.appendChild(userSpan);
     headerDiv.appendChild(timeSpan);
 
-    
     const messageDiv = document.createElement('div');
     messageDiv.className = 'text';
     messageDiv.innerHTML = replaceEmojis(message);
     messageDiv.style.lineHeight = '1.4';
     messageDiv.style.wordWrap = 'break-word';
 
-    
     msgDiv.appendChild(headerDiv);
     msgDiv.appendChild(messageDiv);
 
-    
     chatDiv.appendChild(msgDiv);
     
-    
     if (animate && !chatRoomVisited) {
-        
         let start = null;
-        const duration = 200; 
+        const duration = 200;
         
         function step(timestamp) {
-    if (!start) start = timestamp;
-    const progress = timestamp - start;
-    const percentage = Math.min(progress / duration, 1);
-    
-    
-    const eased = 1 - Math.pow(1 - percentage, 3); 
-    
-    msgDiv.style.opacity = eased;
-    msgDiv.style.transform = `translateY(${20 * (1 - eased)}px)`;
-    
-    if (percentage < 1) {
-        requestAnimationFrame(step);
-    } else {
-        msgDiv.style.opacity = '';
-        msgDiv.style.transform = '';
-    }
-}
+            if (!start) start = timestamp;
+            const progress = timestamp - start;
+            const percentage = Math.min(progress / duration, 1);
+            
+            const eased = 1 - Math.pow(1 - percentage, 3);
+            
+            msgDiv.style.opacity = eased;
+            msgDiv.style.transform = `translateY(${20 * (1 - eased)}px)`;
+            
+            if (percentage < 1) {
+                requestAnimationFrame(step);
+            } else {
+                msgDiv.style.opacity = '';
+                msgDiv.style.transform = '';
+            }
+        }
         
         requestAnimationFrame(step);
         
@@ -1581,20 +1609,10 @@ function addMessage(username, message, timestamp, isMe = false, animate = false)
     chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
-function isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
-
 function playMessageSound() {
     const sound = document.getElementById('messageSound');
     if (sound) {
-        sound.currentTime = 0; 
+        sound.currentTime = 0;
         sound.play().catch(error => {
             console.log('Audio play failed:', error);
         });
@@ -1668,10 +1686,8 @@ function updateVisitorList(visitors) {
     });
 }
 
-
 guestbookForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    
     
     document.getElementById('nameError').style.display = 'none';
     document.getElementById('messageError').style.display = 'none';
@@ -1682,13 +1698,11 @@ guestbookForm.addEventListener('submit', function(e) {
     
     let isValid = true;
     
-    
     if (!name) {
         document.getElementById('nameError').style.display = 'block';
         isValid = false;
         document.getElementById('name').focus();
     }
-    
     
     if (!message) {
         document.getElementById('messageError').style.display = 'block';
@@ -1706,14 +1720,14 @@ guestbookForm.addEventListener('submit', function(e) {
         return;
     }
     
-    
     const newEntry = {
         name,
-        website: website || '', 
+        website: website || '',
         message,
     };
 
-    fetch('https://chat-backend-uesj.onrender.com/api/guestbook', {
+    // Use dynamic URL based on current domain
+    fetch(`${getBaseURL()}/api/guestbook`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1760,12 +1774,13 @@ document.getElementById('name').addEventListener('input', function() {
 document.getElementById('guestbookMessage').addEventListener('input', function() {
     if (this.value.length > 150) {
         this.value = this.value.slice(0, 150);
-        showError("Message cannot exceed 150characters");
+        showError("Message cannot exceed 150 characters");
     }
 });
 
 function loadGuestbookEntries() {
-    fetch('https://chat-backend-1-dgp6.onrender.com/api/guestbook')
+    // Use dynamic URL based on current domain
+    fetch(`${getBaseURL()}/api/guestbook`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Failed to load guestbook entries");
@@ -1826,96 +1841,127 @@ function addGuestbookEntryToPage(entry) {
 }
 
 function connect() {
-    if (ws) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
         ws.close();
     }
     
     statusDiv.textContent = 'Connecting...';
     statusDiv.style.color = '#FFD580';
     
-    const url = "wss://chat-backend-uesj.onrender.com"; 
+    // Use dynamic URL based on current domain
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const url = `${protocol}//${window.location.host}`;
     ws = new WebSocket(url);
 
-    
-ws.onopen = function() {
-    console.log('Connected to chat server.');
-    statusDiv.textContent = 'Connected!';
-    statusDiv.style.color = '#FFD580';
-    
-    
-    setInterval(() => {
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'ping', token: sessionToken }));
+    ws.onopen = function() {
+        console.log('Connected to chat server.');
+        statusDiv.textContent = 'Connected!';
+        statusDiv.style.color = '#4CAF50';
+        reconnectAttempts = 0;
+        
+        if (window.keepAliveInterval) {
+            clearInterval(window.keepAliveInterval);
         }
-    }, 30000); 
-};
+        window.keepAliveInterval = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN && sessionToken) {
+                ws.send(JSON.stringify({ type: 'ping', token: sessionToken }));
+            }
+        }, 30000);
+    };
 
     ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        
-        switch (data.type) {
-            case 'session':
-                sessionToken = data.token;
-                break;
-            case 'init':
-    if (!messagesInitialized) {
-        chatDiv.innerHTML = '';
-        data.messages.forEach(msg => {
-            const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            addMessage(msg.user, msg.text, timestamp, msg.user === 'You', false); 
-        });
-        messagesInitialized = true;
-    }
-    break;
-            case 'chat':
-    const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    addMessage(data.user, data.text, timestamp, data.user === 'You', true); 
-    break;
-            case 'userList':
-                updateVisitorList(data.users);
-                break;
-            case 'error':
-                showError(data.message);
-                break;
-            case 'delete':
-                const msgToDelete = document.querySelector(`.msg[data-id="${data.id}"]`);
-                if (msgToDelete) msgToDelete.remove();
-                break;
+        try {
+            const data = JSON.parse(event.data);
+            
+            switch (data.type) {
+                case 'session':
+                    sessionToken = data.token;
+                    myUsername = data.username;
+                    console.log('Session token received:', sessionToken, 'Username:', myUsername);
+                    break;
+                case 'init':
+                    if (!messagesInitialized) {
+                        chatDiv.innerHTML = '';
+                        data.messages.forEach(msg => {
+                            const timestamp = new Date(msg.timestamp).toLocaleTimeString('en-US', { 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                            });
+                            addMessage(msg.user, msg.text, timestamp, msg.user === myUsername, false);
+                        });
+                        messagesInitialized = true;
+                    }
+                    break;
+                case 'chat':
+                    const timestamp = new Date().toLocaleTimeString('en-US', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                    addMessage(data.user, data.text, timestamp, data.user === myUsername, true);
+                    break;
+                case 'userList':
+                    updateVisitorList(data.users);
+                    break;
+                case 'error':
+                    showError(data.message);
+                    break;
+                case 'typing':
+                    // Handle typing indicators (you could implement this)
+                    break;
+            }
+        } catch (error) {
+            console.error('Error processing message:', error, event.data);
         }
     };
 
-    ws.onclose = function() {
-    statusDiv.textContent = 'Disconnected. Reconnecting...';
-    statusDiv.style.color = 'red';
-    setTimeout(connect, 3000); 
-};
+    ws.onclose = function(event) {
+        console.log('WebSocket connection closed:', event.code, event.reason);
+        statusDiv.textContent = 'Disconnected. Reconnecting...';
+        statusDiv.style.color = 'red';
+        
+        if (window.keepAliveInterval) {
+            clearInterval(window.keepAliveInterval);
+        }
+        
+        // Exponential backoff for reconnection
+        reconnectAttempts++;
+        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+        setTimeout(connect, delay);
+    };
 
-    ws.onerror = function(err) {
-        console.error('WebSocket error:', err);
-        statusDiv.textContent = 'Error. Retrying...';
+    ws.onerror = function(error) {
+        console.error('WebSocket error:', error);
+        statusDiv.textContent = 'Connection error. Retrying...';
         statusDiv.style.color = 'red';
     };
 }
 
 sendBtn.addEventListener('click', function() {
     const text = messageInput.value.trim();
-    if (text && ws && ws.readyState === WebSocket.OPEN) {
+    if (text && ws && ws.readyState === WebSocket.OPEN && sessionToken) {
         ws.send(JSON.stringify({ type: 'chat', text, token: sessionToken }));
         messageInput.value = '';
         charCount.textContent = '0/300';
+        
+        // Send not typing
+        isTyping = false;
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+            typingTimeout = null;
+        }
     }
 });
 
 messageInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         sendBtn.click();
+        e.preventDefault();
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
     connect();
     loadGuestbookEntries();
-    
     
     prevPageBtn.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -1935,31 +1981,27 @@ let soundEnabled = false;
 let lastSoundTime = 0;
 const SOUND_COOLDOWN = 300;
 
-
 function enableSound() {
     soundEnabled = true;
     
-    
     const sound = document.getElementById('messageSound');
     if (sound) {
-        sound.volume = 0.001; 
+        sound.volume = 0.001;
         sound.play().then(() => {
             sound.pause();
             sound.currentTime = 0;
-            sound.volume = 1; 
+            sound.volume = 1;
         }).catch(error => {
             console.log('Audio warm-up failed:', error);
         });
     }
 }
 
-
 document.addEventListener('click', function() {
     if (!soundEnabled) {
         enableSound();
     }
 });
-
 
 document.addEventListener('focus', function(e) {
     if ((e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') && !soundEnabled) {
@@ -1969,7 +2011,6 @@ document.addEventListener('focus', function(e) {
 
 function playMessageSound() {
     if (!soundEnabled) return;
-    
     
     if (chatRoomContent.style.display !== 'block') {
         return;
@@ -1988,11 +2029,11 @@ function playMessageSound() {
             sound.currentTime = 0;
             sound.play().catch(error => {
                 console.log('Audio play failed, re-enabling sound:', error);
-                soundEnabled = false; 
+                soundEnabled = false;
             });
         } catch (error) {
             console.log('Audio error, re-enabling sound:', error);
-            soundEnabled = false; 
+            soundEnabled = false;
         }
     }
 }
