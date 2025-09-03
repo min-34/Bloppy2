@@ -98,23 +98,19 @@ body {
 }
 
 .image-container {
-    max-width: 600px;
-    max-height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border: 4px dashed #FFD580;
+    display: inline-block;              
+    border: 4px dashed #FFD580;        
     border-radius: 12px;
     box-sizing: border-box;
     margin: 0 auto;
+    overflow: hidden;                 
 }
 
 .image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
+    display: block;                   
+    max-width: 100%;                  
+    height: auto;                    
+    border-radius: 12px;             
 }
 
 .buttons {
@@ -494,27 +490,22 @@ button:hover, button.active {
 }
 
 .update-image {
-width: 600px;
-height: 300px;
-max-width: 600px;
-max-height: 300px;
- object-fit: cover;
- border: 2px dashed #FFD580;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 4px dashed #FFD580;
+    border-radius: 12px;
+    object-fit: contain; 
 }
 
 .update-container {
-    width: 600px;
+    display: inline-block;
     background-color: white;
-    border: 4px dashed #FFD580;
     border-radius: 12px;
-    box-sizing: border-box;
     margin: 20px auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
-    background-size: 100% 24px;
+    padding: 10px; 
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .update-text {
@@ -565,20 +556,22 @@ max-height: 300px;
 }
 
 .about-container {
-    width: 600px;
-    background-color: white;
-    border: 4px dashed #FFD580;
-    border-radius: 12px;
-    box-sizing: border-box;
+    display: inline-block;      
     margin: 20px auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
-    background-size: 100% 24px;
+    text-align: center;         
+    background: none;          
+    border: none;             
+    padding: 0;                
 }
 
+.about-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 4px dashed #FFD580;  
+    border-radius: 12px;
+    box-sizing: border-box;
+}
 .about-text {
     background-color: #fff9c4;
     border: 2px dashed #FFD580;
