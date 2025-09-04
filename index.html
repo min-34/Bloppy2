@@ -98,22 +98,23 @@ body {
 }
 
 .image-container {
-    display: inline-block;              
-    border: 4px dashed #FFD580;        
+    max-width: 600px;
+    max-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 4px dashed #FFD580;
     border-radius: 12px;
     box-sizing: border-box;
     margin: 0 auto;
-    overflow: hidden;                 
 }
 
 .image-container img {
-    display: block;                   
-    width: 100%;                  
-    height: auto;                    
-    border-radius: 12px;             
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
 }
 
 .buttons {
@@ -164,13 +165,7 @@ button:hover, button.active {
     flex-wrap: wrap;
     margin-bottom: 15px;
 }
-.sticker { 
-    width: 50px; 
-    height: 50px; 
-    object-fit: contain; 
-    background-size: contain;
-    background-repeat: no-repeat;
-}
+.sticker { width: 50px; height: 50px; object-fit: contain; }
 .sticker:nth-child(1) { animation: sway1 7s ease-in-out infinite; }
 .sticker:nth-child(2) { animation: sway2 9s ease-in-out infinite; }
 .sticker:nth-child(3) { animation: sway3 8s ease-in-out infinite; }
@@ -200,9 +195,6 @@ button:hover, button.active {
     border-radius: 12px;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 .chat-room-frame {
     width: 600px;
@@ -308,8 +300,6 @@ button:hover, button.active {
     vertical-align: middle;
     display: inline-block;
     margin: 0 1px;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #emojiBtn:focus, #sendBtn:focus {
@@ -385,8 +375,6 @@ button:hover, button.active {
     cursor: pointer;
     transition: transform 0.2s;
     padding: 3px;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 .emoji-item:hover {
     transform: scale(1.2);
@@ -411,9 +399,6 @@ button:hover, button.active {
     height: 40px;
     animation: sway2 8s ease-in-out infinite;
     order: -1;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 .rules-btn {
     background: none;
@@ -449,9 +434,6 @@ button:hover, button.active {
     border-radius: 12px;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 .delete-text {
     font-size: 14px;
@@ -509,29 +491,30 @@ button:hover, button.active {
     height: 30px;
     margin-right: 10px;
     object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .update-image {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 4px dashed #FFD580;
-    border-radius: 12px;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
+width: 600px;
+height: 300px;
+max-width: 600px;
+max-height: 300px;
+ object-fit: cover;
+ border: 2px dashed #FFD580;
 }
 
 .update-container {
-    display: inline-block;
+    width: 600px;
     background-color: white;
+    border: 4px dashed #FFD580;
     border-radius: 12px;
-    margin: 20px auto;
-    padding: 10px; 
     box-sizing: border-box;
-    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+    background-size: 100% 24px;
 }
 
 .update-text {
@@ -564,9 +547,6 @@ button:hover, button.active {
     width: 100%;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .gallery-container, .games-container, .links-container {
@@ -585,25 +565,20 @@ button:hover, button.active {
 }
 
 .about-container {
-    display: inline-block;      
-    margin: 20px auto;
-    text-align: center;         
-    background: none;          
-    border: none;             
-    padding: 0;                
-}
-
-.about-container img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 4px dashed #FFD580;  
+    width: 600px;
+    background-color: white;
+    border: 4px dashed #FFD580;
     border-radius: 12px;
     box-sizing: border-box;
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+    background-size: 100% 24px;
 }
+
 .about-text {
     background-color: #fff9c4;
     border: 2px dashed #FFD580;
@@ -686,8 +661,6 @@ button:hover, button.active {
     height: auto;
     object-fit: contain;
     display: block;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .credits-section {
@@ -726,9 +699,7 @@ button:hover, button.active {
     height: 100px;      
     object-fit: contain;
     display: block;
-    margin: 0 auto;
-    background-size: contain;
-    background-repeat: no-repeat;
+    margin: 0 auto;    
 }
 
 .asset-type {
@@ -750,9 +721,7 @@ button:hover, button.active {
 .banner-grid .asset-item img {
     width: 100%;              
     height: auto;            
-    object-fit: contain;
-    background-size: contain;
-    background-repeat: no-repeat;
+    object-fit: contain;    
 }
 
 .guestbook-container {
@@ -1127,7 +1096,7 @@ button:hover, button.active {
     <div class="gallery-container">
         <div class="gallery-text">
             <div class="credits-section">
-                <p>Welcome to my pixel art gallery, all assets here are made by me. . .</p>
+                <p>“All images shown here are sourced from Pinterest, except for a few that are my own artwork. I do not claim ownership of the rest.” </p>
                 <a href="https://www.pinterest.com/" target="_blank" class="pinterest-button">Pinterest</a>
             </div>
            
@@ -1144,7 +1113,6 @@ button:hover, button.active {
     <div class="asset-item"><img src="images/banner.jpg" alt="Banner 1"></div>
     <div class="asset-item"><img src="images/banner2.jpg" alt="Banner 2"></div>
     <div class="asset-item"><img src="images/banner3.jpg" alt="Banner 3"></div>
-    <div class="asset-item"><img src="images/banner4.jpg" alt="Banner 4"></div>
 </div>
            
             <div class="asset-type">Stickers</div>
@@ -1275,13 +1243,12 @@ button:hover, button.active {
     <div class="update-container">
         <div class="update-text">
             Version 1.0 – Initial Release<br>
-            - Personal site launched<br>
-            - Visitors can chat<br>
+            -Personal site launched<br>
+            -Visitors can chat<br>
             <br>
             Version 1.1 – Update<br>
-            - Fixed chat UI<br>
-            - Added Guestbook<br>
-            - Fixed backend issues
+            -Fixed chat UI <br>
+            -Added Guestbook
         </div>
     </div>
 </div>
