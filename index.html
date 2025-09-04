@@ -108,9 +108,12 @@ body {
 
 .image-container img {
     display: block;                   
-    max-width: 100%;                  
+    width: 100%;                  
     height: auto;                    
     border-radius: 12px;             
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .buttons {
@@ -161,7 +164,13 @@ button:hover, button.active {
     flex-wrap: wrap;
     margin-bottom: 15px;
 }
-.sticker { width: 50px; height: 50px; object-fit: contain; }
+.sticker { 
+    width: 50px; 
+    height: 50px; 
+    object-fit: contain; 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
 .sticker:nth-child(1) { animation: sway1 7s ease-in-out infinite; }
 .sticker:nth-child(2) { animation: sway2 9s ease-in-out infinite; }
 .sticker:nth-child(3) { animation: sway3 8s ease-in-out infinite; }
@@ -191,6 +200,9 @@ button:hover, button.active {
     border-radius: 12px;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .chat-room-frame {
     width: 600px;
@@ -296,6 +308,8 @@ button:hover, button.active {
     vertical-align: middle;
     display: inline-block;
     margin: 0 1px;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 #emojiBtn:focus, #sendBtn:focus {
@@ -371,6 +385,8 @@ button:hover, button.active {
     cursor: pointer;
     transition: transform 0.2s;
     padding: 3px;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .emoji-item:hover {
     transform: scale(1.2);
@@ -395,6 +411,9 @@ button:hover, button.active {
     height: 40px;
     animation: sway2 8s ease-in-out infinite;
     order: -1;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .rules-btn {
     background: none;
@@ -430,6 +449,9 @@ button:hover, button.active {
     border-radius: 12px;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .delete-text {
     font-size: 14px;
@@ -487,15 +509,19 @@ button:hover, button.active {
     height: 30px;
     margin-right: 10px;
     object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .update-image {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     border: 4px dashed #FFD580;
     border-radius: 12px;
-    object-fit: contain; 
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .update-container {
@@ -538,6 +564,9 @@ button:hover, button.active {
     width: 100%;
     margin-bottom: 20px;
     border: 4px dashed #FFD580;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .gallery-container, .games-container, .links-container {
@@ -566,11 +595,14 @@ button:hover, button.active {
 
 .about-container img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     border: 4px dashed #FFD580;  
     border-radius: 12px;
     box-sizing: border-box;
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .about-text {
     background-color: #fff9c4;
@@ -654,6 +686,8 @@ button:hover, button.active {
     height: auto;
     object-fit: contain;
     display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .credits-section {
@@ -692,7 +726,9 @@ button:hover, button.active {
     height: 100px;      
     object-fit: contain;
     display: block;
-    margin: 0 auto;    
+    margin: 0 auto;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .asset-type {
@@ -714,7 +750,9 @@ button:hover, button.active {
 .banner-grid .asset-item img {
     width: 100%;              
     height: auto;            
-    object-fit: contain;    
+    object-fit: contain;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .guestbook-container {
