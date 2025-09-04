@@ -53,14 +53,27 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     background-color: transparent;
 }
 
-.image-container img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: contain; 
-    display: block; 
-    border: 4px dashed #FFD580;
-    border-radius: 12px; 
+.image-container img,
+.chat-room-content img,
+.update-image,
+.about-content img,
+.gallery-content img,
+.games-content img,
+.links-content img,
+.about-container img,
+.gallery-item img,
+.asset-item img,
+.banner-grid .asset-item img,
+.rules-content img {
+    display: block;
+    width: 100%;
+    height: auto;
     background-color: transparent;
+    border: 2px solid #f8c9a5;   
+    outline: 4px dashed #f4a261; 
+    outline-offset: 6px;         
+    border-radius: 0;            
+    box-sizing: border-box;
 }
 
 .buttons { display: flex; justify-content: center; gap: 5px; margin: 10px 0 20px 0; } button{ font-family: 'Short Stack', cursive; padding: 6px 12px; background-color: transparent; color: #5D4037; border: none; cursor: pointer; font-size: 16px; } button:hover,button.active { text-decoration: underline; }
@@ -71,16 +84,10 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .stickers-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; } .sticker{ width: 50px; height: 50px; object-fit: contain; } .sticker:nth-child(1){ animation: sway1 7s ease-in-out infinite; } .sticker:nth-child(2){ animation: sway2 9s ease-in-out infinite; } .sticker:nth-child(3){ animation: sway3 8s ease-in-out infinite; } @keyframes sway1{ 0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);} } @keyframes sway2{ 0%,100%{transform:rotate(4deg);}50%{transform:rotate(-4deg);} } @keyframes sway3{ 0%,100%{transform:rotate(-6deg);}50%{transform:rotate(6deg);} }
 
-.text-frame { background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 12px; padding: 20px; color: #5D4037; font-family: 'Short Stack', cursive; text-align: center; transition: color 0.3s ease; }
+.text-frame { background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 12px; padding: 20px; color: 5D4037; font-family: 'Short Stack', cursive; text-align: center; transition: color 0.3s ease; }
 
 .chat-room-content { display: none; width: 600px; text-align: center; margin: 0 auto; } 
-.chat-room-content img{ 
-    width: 100%; 
-    border-radius: 12px; 
-    margin-bottom: 20px; 
-    border: 4px dashed #FFD580; 
-    background-color: transparent;
-} 
+
 .chat-room-frame{ width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; padding: 20px; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
 
 #chat { border: 2px solid #FFD580; padding: 15px; height: 300px; overflow-y: auto; margin-bottom: 15px; background: white; text-align: left; border-radius: 12px; background-image: linear-gradient(to bottom, #f5f5f5 1px, transparent 1px); background-size: 100% 24px; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
@@ -141,7 +148,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .rules-content p { font-size: 14px; line-height: 1.5; margin: 0 0 10px 0; }
 
-.rules-content img { width: 100%; border-radius: 12px; margin-bottom: 20px; border: 4px dashed #FFD580; background-color: transparent; } .delete-text{ font-size: 14px; line-height: 1.5; color: #e57373; font-weight: bold; }
+.delete-text{ font-size: 14px; line-height: 1.5; color: #e57373; font-weight: bold; }
 
 .home-container { display: flex; align-items: stretch; gap: 20px; max-width: 1240px; margin: 0 auto; }
 
@@ -155,15 +162,6 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .visitor-img { width: 30px; height: 30px; margin-right: 10px; object-fit: contain; }
 
-.update-image { 
-    width: 606px; 
-    height: 460px; 
-    object-fit: contain; 
-    border: 4px dashed #FFD580; 
-    border-radius: 12px; 
-    background-color: transparent;
-}
-
 .update-container { display: inline-block; background-color: white; border-radius: 12px; margin: 20px auto; padding: 10px;  box-sizing: border-box; text-align: center; }
 
 .update-text { font-family: 'Short Stack', cursive; color: #5D4037; text-align: center; line-height: 1.6; }
@@ -171,16 +169,6 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 .error-box { margin-top: 10px; padding: 8px 12px; border: 2px dashed #e57373; border-radius: 8px; background: #ffeaea; color: #b71c1c; font-family: 'Short Stack', cursive; font-size: 14px; text-align: center; }
 
 .about-content, .gallery-content, .games-content, .links-content { display: none; width: 600px; text-align: center; margin: 0 auto; }
-
-.about-content img, .gallery-content img, .games-content img, .links-content img { 
-    width: 606px; 
-    height: 460px; 
-    object-fit: contain; 
-    margin-bottom: 20px; 
-    border: 4px dashed #FFD580; 
-    border-radius: 12px; 
-    background-color: transparent; 
-}
 
 .gallery-container, .games-container, .links-container { width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; box-sizing: border-box; margin: 20px auto; padding: 20px; display: flex; flex-direction: column; align-items: center; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; }
 
@@ -191,15 +179,6 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     padding: 0;
 }
 
-.about-container img { 
-    display: block; 
-    max-width: 100%; 
-    height: auto; 
-    border: 4px dashed #FFD580;
-    border-radius: 12px; 
-    box-sizing: border-box; 
-    background-color: transparent;
-} 
 .about-text{ background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 12px; padding: 20px; color: #5D4037; font-family: 'Short Stack', cursive; text-align: center; transition: color 0.3s ease; }
 
 .gallery-text, .games-text, .links-text { font-family: 'Short Stack', cursive; color: #5D4037; text-align: center; line-height: 1.6; }
@@ -224,15 +203,6 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .gallery-item:hover { transform: scale(1.05); }
 
-.gallery-item img { 
-    width: 100%; 
-    height: 200px; 
-    object-fit: contain; 
-    display: block; 
-    border: 4px dashed #FFD580;
-    border-radius: 8px; 
-}
-
 .credits-section { margin: 30px 0; padding: 15px; background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 8px; text-align: center; }
 
 .credits-title { font-family: 'Short Stack', cursive; color: #5D4037; margin-bottom: 15px; }
@@ -243,33 +213,11 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .asset-item:hover { transform: scale(1.05); }
 
-.asset-item img { 
-    width: auto; 
-    height: 100px;
-    object-fit: contain; 
-    display: block; 
-    margin: 0 auto;
-    border: 4px dashed #FFD580;
-    border-radius: 8px; 
-    background-color: transparent;
-    padding: 5px;
-    box-sizing: border-box;
-}
-
 .asset-type { font-family: 'Short Stack', cursive; color: #5D4037; margin-top: 30px; margin-bottom: 15px; text-align: center; font-size: 20px; }
 
 .banner-grid { display: flex; flex-direction: column;
     align-items: center;
     gap: 15px;
-}
-
-.banner-grid .asset-item img { 
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    border: 4px dashed #FFD580;
-    border-radius: 8px; 
-    background-color: transparent;
 }
 
 .guestbook-container { width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; box-sizing: border-box; margin: 20px auto; padding: 20px; display: flex; flex-direction: column; align-items: center; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; }
