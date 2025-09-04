@@ -50,7 +50,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: transparent; /* Remove background color */
 }
 
 .image-container img { 
@@ -58,9 +58,9 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     height: 100%; 
     object-fit: contain; 
     display: block; 
-    border: 4px dashed #FFD580;
-    border-radius: 12px;
-    background-color: #fff5e1; /* Soft orange background */
+    border: 4px dashed #FFD580; /* Add border to image */
+    border-radius: 12px; /* Add border radius to image */
+    background-color: #fff9e7; /* Add background to image */
 }
 
 .buttons { display: flex; justify-content: center; gap: 5px; margin: 10px 0 20px 0; } button{ font-family: 'Short Stack', cursive; padding: 6px 12px; background-color: transparent; color: #5D4037; border: none; cursor: pointer; font-size: 16px; } button:hover,button.active { text-decoration: underline; }
@@ -79,7 +79,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     border-radius: 12px; 
     margin-bottom: 20px; 
     border: 4px dashed #FFD580; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: #fff9e7; /* Add background to image */
 } 
 .chat-room-frame{ width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; padding: 20px; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
 
@@ -141,7 +141,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
 
 .rules-content p { font-size: 14px; line-height: 1.5; margin: 0 0 10px 0; }
 
-.rules-content img { width: 100%; border-radius: 12px; margin-bottom: 20px; border: 4px dashed #FFD580; background-color: #fff5e1; /* Soft orange background */ } .delete-text{ font-size: 14px; line-height: 1.5; color: #e57373; font-weight: bold; }
+.rules-content img { width: 100%; border-radius: 12px; margin-bottom: 20px; border: 4px dashed #FFD580; background-color: #fff9e7; } .delete-text{ font-size: 14px; line-height: 1.5; color: #e57373; font-weight: bold; }
 
 .home-container { display: flex; align-items: stretch; gap: 20px; max-width: 1240px; margin: 0 auto; }
 
@@ -161,7 +161,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     object-fit: contain; 
     border: 4px dashed #FFD580; 
     border-radius: 12px; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: #fff9e7;
 }
 
 .update-container { display: inline-block; background-color: white; border-radius: 12px; margin: 20px auto; padding: 10px;  box-sizing: border-box; text-align: center; }
@@ -179,7 +179,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     margin-bottom: 20px; 
     border: 4px dashed #FFD580; 
     border-radius: 12px; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: #fff9e7; 
 }
 
 .gallery-container, .games-container, .links-container { width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; box-sizing: border-box; margin: 20px auto; padding: 20px; display: flex; flex-direction: column; align-items: center; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; }
@@ -198,7 +198,7 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     border: 4px dashed #FFD580;
     border-radius: 12px; 
     box-sizing: border-box; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: #fff9e7;
 } 
 .about-text{ background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 12px; padding: 20px; color: #5D4037; font-family: 'Short Stack', cursive; text-align: center; transition: color 0.3s ease; }
 
@@ -229,9 +229,9 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     height: 200px; 
     object-fit: contain; 
     display: block; 
-    background-color: #fff5e1; /* Soft orange background */
+    background-color: #fff9e7; 
     border-radius: 8px; 
-    border: 4px dashed #FFD580;
+    border: 4px dashed #FFD580; /* Add border to gallery images */
 }
 
 .credits-section { margin: 30px 0; padding: 15px; background-color: #fff9c4; border: 2px dashed #FFD580; border-radius: 8px; text-align: center; }
@@ -250,10 +250,10 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     object-fit: contain; 
     display: block; 
     margin: 0 auto;
-    border: 4px dashed #FFD580;
-    border-radius: 8px;
-    background-color: #fff5e1; /* Soft orange background */
-    padding: 5px;
+    border: 4px dashed #FFD580; /* Add border to asset images */
+    border-radius: 8px; /* Add border radius to asset images */
+    background-color: #fff9e7; /* Add background to asset images */
+    padding: 5px; /* Add some padding */
     box-sizing: border-box;
 }
 
@@ -268,9 +268,9 @@ body, .top-buttons, .image-container, .frame, .chat-room-frame { max-width: 90%;
     width: 100%;
     height: auto;
     object-fit: contain;
-    border: 4px dashed #FFD580;
-    border-radius: 8px;
-    background-color: #fff5e1; /* Soft orange background */
+    border: 4px dashed #FFD580; /* Add border to banner images */
+    border-radius: 8px; /* Add border radius to banner images */
+    background-color: #fff9e7; /* Add background to banner images */
 }
 
 .guestbook-container { width: 600px; background-color: white; border: 4px dashed #FFD580; border-radius: 12px; box-sizing: border-box; margin: 20px auto; padding: 20px; display: flex; flex-direction: column; align-items: center; background-image: linear-gradient(to bottom, #f0f0f0 1px, transparent 1px); background-size: 100% 24px; }
